@@ -1,6 +1,5 @@
-$("searchbutton").on("click", function() {
+$("#search-btn").on("click", function() {
   var searchterm = $("#search-term").val().trim();
-  var numofartciles = $("#select-number").val().trim();
   var startYr = $("#start-year").val().trim();
   var endYr = $("#end-year").val().trim();
   var queryURL = "";
@@ -29,31 +28,24 @@ if(startYr == "" & endYr == ""){
     method: "GET"
   })
     .then(function(response) {
-        var results = response.data;
-        console.log(response);
-        for (var i = 0; i < results.length; i++) {
-          var articleDiv = $("<div>");
-        }
+      console.log(response);
+      var results = response.response.docs;
+      console.log(results)
+      $(".article-list").empty();
+      var articleNum = $("#select-number").val().trim();
+      for (var i = 0; i < articleNum; i++) {
+        var articleDiv = $("<div>");
+        articleDiv.append("Title: " + results[i].headline.main + "<br>");
+        articleDiv.append("Author: " + results[i].byline.original + "<br>");
+        articleDiv.append("Section: " + results[i].section_name + "<br>");
+        articleDiv.append("Date: " + results[i].pub_date + "<br>");
+        articleDiv.append("URL: " + results[i].web_url + "<br><br>");
+        articleDiv.css('border', '2px solid black');
+        articleDiv.css('margin', '10px');
+        $(".article-list").append(articleDiv);
+      }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$("#clear-form").on("click", function(){
+  $(".article-list").empty();
+});
